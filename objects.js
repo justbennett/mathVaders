@@ -52,7 +52,7 @@ function TextBox(txt_, x_, y_, wide_, high_){
 	this.txt = txt_;
 	this.x = x_;
 	this.y = y_;
-	this.wide = wide;
+	this.wide = wide_;
 	this.high = high_;
 
 	this.display = function(){
@@ -72,6 +72,8 @@ function Problem(x_, a_, b_, sign_){
 	this.high = textSize()*4;
 
 	var signs = ['+','-','x'];
+
+	if (isMobile) this.ySpeed = 5;
 
 	if (sign_ == "Mixed") this.sign = signs[floor(random(0,2.9))];
 	else this.sign = sign_;

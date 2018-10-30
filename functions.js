@@ -1,44 +1,46 @@
 //------------Functions---------------
 function setAudio(){
-   sine.amp(volume);
-   noise.amp(volume);
-   if(scene==Screen.startScreen || pause){
-     sine.stop();
-   }
+	if (!isMobile){
+	   sine.amp(volume);
+	   noise.amp(volume);
+	   if(scene==Screen.startScreen || pause){
+	     sine.stop();
+	   }
 
-   if(scene==Screen.playScreen && !pause){
-     note+=100;
-     if(note>1000) note = 10;
-   
-      sine.freq(note+score*10);
-      var i = sin(millis()*0.01);
-      sine.pan(i);
-   }
-   if(scene==Screen.levelUpScreen){
-     note+=10;
-     sine.freq(note);
-     if(note>1000){
-       sine.stop();
-     }
-   }
-   if(scene==Screen.gameOverScreen){
-      note-=10;
-      sine.freq(note);
-      if(note<10){
-        sine.stop();
-        
-      }
+	   if(scene==Screen.playScreen && !pause){
+	     note+=100;
+	     if(note>1000) note = 10;
+	   
+	      sine.freq(note+score*10);
+	      var i = sin(millis()*0.01);
+	      sine.pan(i);
+	   }
+	   if(scene==Screen.levelUpScreen){
+	     note+=10;
+	     sine.freq(note);
+	     if(note>1000){
+	       sine.stop();
+	     }
+	   }
+	   if(scene==Screen.gameOverScreen){
+	      note-=10;
+	      sine.freq(note);
+	      if(note<10){
+	        sine.stop();
+	       }
+	   }
    }
 }
 
 function reset(){
+	
 //remove all invaders
 	for (var i = invaders.length; i >= 0; i--){
 		invaders.pop();
 	}
 
 //add an invader per level
-	for (var i = 0; i <= level; i++){
+	for (var i = 1; i <= level; i++){
 		makeInvader();
 	}
 
@@ -46,8 +48,10 @@ function reset(){
 	score=0;
 	life=5;
 	showMiss=-1;
-	sine.stop();
-	noise.stop();
+	if(!isMobile){
+		sine.stop();
+		noise.stop();
+	}
 	scene = Screen.startScreen;
 	pause = false;
 	cumulativeScore=0;
@@ -55,10 +59,12 @@ function reset(){
 
 function levelUp(){
 
-	noise.stop();
-	sine.stop();
-	if (playFlag) sine.start();
-	sine.amp(volume);
+	if(!isMobile){
+		noise.stop();	
+		sine.stop();
+		if (playFlag) sine.start();
+		sine.amp(volume);
+	}
 	level++;
 	life = 5;
 	scene = Screen.playScreen;
@@ -100,18 +106,23 @@ function drawScreen(){
 
                       
 	textAlign(CENTER);//Answer entry
+	text('ANSWER:' , width * 0.45, height - 20);
 	for(var i = 0; i < answerBuffer.length; i++){
-	text(answerBuffer[i], width/2 +i*10, height - 20);     
+	text(answerBuffer[i], width * 0.5 +i *buttonSpacing, height - 20);     
 	}
 	textAlign(LEFT);
 }
 
 function sizeEveryThing(){
 	resizeCanvas(windowWidth, windowHeight);
- 
-	fontSize = height*0.05;
+ 	myCanvas.style.width = '100%';
+		myCanvas.style.height = '100%';
+
+	if(width > height )fontSize = height*0.03;
+	else fontSize = width*0.03;
+
 	textSize(fontSize);
-	padding = 10;
+	padding = 20;
 	buttonSpacing = textSize() + padding;
 	buttonBoxX = width * 0.1 + textWidth("Select Game Type:") + buttonSpacing + padding;
 	bottomBarY = height - (buttonSpacing * 3);
@@ -123,6 +134,12 @@ function sizeEveryThing(){
 	
 	buttons[4].resize( width/2, height * 0.5);
 	buttons[5].resize(width * 0.33, bottomBarY + buttonSpacing);
+	buttons[6].resize(width * 0.33, bottomBarY + buttonSpacing*2 +padding);
+
+	for (var i = 0; i < 10; i++){
+		kepad[i].resize((width/2) + i*buttonSpacing, bottomBarY + buttonSpacing);
+	}
+	kepad[10].resize((width/2) + buttonSpacing * 5 , bottomBarY + buttonSpacing*2 + padding);
 
 }
 
@@ -150,6 +167,8 @@ function makeInvader() {
 }
 
 function showInvaders(){
+	if(invaders.length == 0 ) makeInvader();
+
 	for (var i = 0; i < invaders.length; i++){
 		invaders[i].display();
 		if(!pause) invaders[i].drop();
@@ -161,7 +180,7 @@ function showInvaders(){
         	score--;
         	life--;
 
-	      		if (playFlag){
+	      		if (playFlag && !isMobile){
 	      			noise.start();
 	      			noise.amp(volume);
 	      			for (var j = 450; j > 300; j--){
@@ -176,7 +195,7 @@ function showInvaders(){
 			makeInvader();
       		score++;
       		cumulativeScore+=(height-invaders[i].y)/1000;
-	      	if(playFlag){
+	      	if(playFlag && !isMobile){
 	   			noise.start();
 	   			noise.amp(volume);
       			for (var j = 600; j < 650; j++){
