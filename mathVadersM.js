@@ -68,6 +68,8 @@ var buttonSpacing = 28;
 function setup(){
   createCanvas(windowWidth, windowHeight);
   //canv.parent("title");
+  link = createA("..", "Go Back");
+  link.position(10, height-30);
   sine = new p5.Oscillator();
   sine.setType('sine');
   noise = new p5.Oscillator();
