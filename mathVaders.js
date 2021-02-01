@@ -66,7 +66,7 @@ var link;
 function setup(){
 	createCanvas(windowWidth, windowHeight);
 	//canv.parent("title");
-	link = createA("../mathvaders", "Go Back");
+	link = createA("../mathVaders", "Go Back");
 	link.position(10, height-50);
 	sine = new p5.Oscillator();
 	sine.setType('sine');
