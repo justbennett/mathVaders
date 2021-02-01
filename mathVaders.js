@@ -61,10 +61,13 @@ var buttonSpacing;
 var fontSize;
 var padding;
 var buttonBoxX;
+var link;
 
 function setup(){
 	createCanvas(windowWidth, windowHeight);
 	//canv.parent("title");
+	link = createA("..", "<<Back");
+	link.position(10, height-10);
 	sine = new p5.Oscillator();
 	sine.setType('sine');
 	noise = new p5.Oscillator();
